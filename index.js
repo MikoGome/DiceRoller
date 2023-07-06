@@ -9,10 +9,12 @@ function main() {
   const desiredStats = {
     STR: 4,
     DEX: 4,
-    LUK: 4
+    LUK: 5
   }
   setTimeout(() => {
-    rollDice(desiredStats);
+    // rollDice(desiredStats);
+    checkStats();
+    process.exit();
   }, 5000);
 }
 
@@ -39,20 +41,31 @@ function checkStats(desiredStats) {
     LUK: 0
   }
   //STR
-  if(isMinVal(849, 339)) {
+  if(is4(849, 339)) {
     output.STR = 4;
+  } else if(is5(849, 339)){
+    output.STR = 5;
   }
+
   //DEX
-  if(isMinVal(849, 359)) {
+  if(is4(849, 359)) {
     output.DEX = 4;
+  } else if(is5(849, 359)){
+    output.DEX = 5;
   }
+
   //INT
-  if(isMinVal(849, 379)) {
+  if(is4(849, 379)) {
     output.INT = 4;
+  } else if(is5(849, 379)){
+    output.INT = 5;
   }
+
   //LUK
-  if(isMinVal(849, 399)) {
+  if(is4(849, 399)) {
     output.LUK = 4;
+  } else if(is5(849, 399)){
+    output.LUK = 5;
   }
 
   //check
@@ -64,7 +77,7 @@ function checkStats(desiredStats) {
   return false;
 }
 
-function isMinVal(x, y) {
+function is4(x, y) {
   if(
     robot.getPixelColor(x, y) === '000000' &&
     robot.getPixelColor(x, y+6) === '000000'&&
@@ -76,10 +89,17 @@ function isMinVal(x, y) {
   }
 }
 
-function sleep(ms) {
-  const sab = new SharedArrayBuffer(1024);
-  const int32 = new Int32Array(sab);
-  Atomics.wait(int32, 0, 0, ms);
+function is5(x, y) {
+  //LUK 849,399
+  if(
+    robot.getPixelColor(x, y) === '000000' &&
+    robot.getPixelColor(x-3, y+1) === '000000' &&
+    robot.getPixelColor(x+1, y+5) === '000000' &&
+    robot.getPixelColor(x+1, y+6) === '000000' &&
+    robot.getPixelColor(x-2, y+8) === '000000'
+  ) {
+    return true;
+  }
 }
 
 main();
