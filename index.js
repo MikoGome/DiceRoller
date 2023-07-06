@@ -17,7 +17,7 @@ function main() {
 }
 
 function rollDice(desiredStats, mode) {
-  if(checkStats(desiredStats)) {
+  if(checkStats(desiredStats, mode)) {
     robot.moveMouse(833, 484);
     robot.mouseClick();
     console.log('character created');
@@ -34,11 +34,11 @@ function rollDice(desiredStats, mode) {
     robot.moveMouseSmooth(getRandomCoords(910,920), getRandomCoords(395,405));
   }
   setTimeout(() => {
-    rollDice(desiredStats)
+    rollDice(desiredStats, mode)
   }, 1000);
 }
 
-function checkStats(desiredStats) {
+function checkStats(desiredStats, mode) {
   const output = {
     STR: Infinity,
     DEX: Infinity,
