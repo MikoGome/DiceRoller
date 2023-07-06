@@ -72,8 +72,17 @@ function checkStats(desiredStats) {
   }
 
   //check
-  for(const val in desiredStats) {
-    if(output[val] > desiredStats[val]) {
+  let minCounter = 0;
+  for(const attr in output) {
+    if(output[attr] <= 5) {
+      minCounter+=1;
+    }
+  }
+  if(minCounter >=2) {
+    console.log(output);
+  } 
+  for(const attr in desiredStats) {
+    if(output[attr] > desiredStats[attr]) {
       return false;
     }
   }
