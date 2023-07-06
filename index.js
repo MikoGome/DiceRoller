@@ -12,9 +12,7 @@ function main() {
     LUK: 5
   }
   setTimeout(() => {
-    // rollDice(desiredStats);
-    checkStats();
-    process.exit();
+    rollDice(desiredStats);
   }, 5000);
 }
 
