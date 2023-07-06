@@ -11,21 +11,26 @@ function main() {
     DEX: 4,
     LUK: 5
   }
+  
   setTimeout(() => {
     rollDice(desiredStats);
-  }, 5000);
+  }, 3000);
+
 }
 
 function rollDice(desiredStats) {
-  if(!checkStats(desiredStats)) {
+  if(checkStats(desiredStats)) {
     robot.moveMouse(833, 484);
     robot.mouseClick();
     console.log('character created');
     process.exit();
     return;
   }
-  robot.moveMouse(916,400);
-  robot.mouseClick();
+  if(robot.getPixelColor(1304, 662) === 'ee1111') {
+    robot.moveMouse(916,400);
+    robot.mouseClick();
+    robot.moveMouseSmooth(getRandomCoords(910,920), getRandomCoords(395,405));
+  }
   setTimeout(() => {
     rollDice(desiredStats)
   }, 1000);
@@ -33,10 +38,10 @@ function rollDice(desiredStats) {
 
 function checkStats(desiredStats) {
   const output = {
-    STR: 0,
-    DEX: 0,
-    INT: 0,
-    LUK: 0
+    STR: Infinity,
+    DEX: Infinity,
+    INT: Infinity,
+    LUK: Infinity
   }
   //STR
   if(is4(849, 339)) {
@@ -68,11 +73,11 @@ function checkStats(desiredStats) {
 
   //check
   for(const val in desiredStats) {
-    if(desiredStats[val] !== output[val]) {
-      return true;
+    if(output[val] > desiredStats[val]) {
+      return false;
     }
   }
-  return false;
+  return true;
 }
 
 function is4(x, y) {
@@ -98,6 +103,10 @@ function is5(x, y) {
   ) {
     return true;
   }
+}
+
+function getRandomCoords(min, max) {
+  return Math.random() * (max-min) + min;
 }
 
 main();
