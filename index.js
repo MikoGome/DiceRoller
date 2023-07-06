@@ -8,7 +8,8 @@ const readline = require('readline').createInterface({
 function main() {
   const desiredStats = {
     STR: 4,
-    DEX: 4
+    DEX: 4,
+    LUK: 4
   }
   setTimeout(() => {
     rollDice(desiredStats);
@@ -17,7 +18,9 @@ function main() {
 
 function rollDice(desiredStats) {
   if(!checkStats(desiredStats)) {
-    console.log('rolled perfectly');
+    robot.moveMouse(833, 484);
+    robot.mouseClick();
+    console.log('character created');
     process.exit();
     return;
   }
