@@ -1,4 +1,5 @@
 const robot = require('robotjs');
+const numbers = require('./numbers.js');
 
 const readline = require('readline').createInterface({
   input: process.stdin,
@@ -24,9 +25,10 @@ function rollDice(desiredStats, mode) {
     process.exit();
     return;
   }
+
   if(
     robot.getPixelColor(1304, 662) === 'ee1111' && 
-    robot.getPixelColor(672, 172) === 'ffdd55' && 
+    robot.getPixelColor(672, 172) === 'ffcc33' && 
     robot.getPixelColor(676, 131) === '555588'
   ) {
     robot.moveMouse(916,400);
@@ -40,10 +42,10 @@ function rollDice(desiredStats, mode) {
 
 function checkStats(desiredStats, mode) {
   const output = {
-    STR: Infinity,
-    DEX: Infinity,
-    INT: Infinity,
-    LUK: Infinity
+    STR: mode === 'max' ? Infinity : 0,
+    DEX: mode === 'max' ? Infinity : 0,
+    INT: mode === 'max' ? Infinity : 0,
+    LUK: mode === 'max' ? Infinity : 0
   }
 
   if(mode === 'max') {
@@ -65,94 +67,53 @@ function checkStats(desiredStats, mode) {
 
 function checkMax(stats) {
   //STR
-  if(is4(849, 339)) {
+  if(numbers.is4(849, 339)) {
     stats.STR = 4;
-  } else if(is5(849, 339)){
+  } else if(numbers.is5(849, 339)){
     stats.STR = 5;
   }
 
   //DEX
-  if(is4(849, 359)) {
+  if(numbers.is4(849, 359)) {
     stats.DEX = 4;
-  } else if(is5(849, 359)){
+  } else if(numbers.is5(849, 359)){
     stats.DEX = 5;
   }
 
   //INT
-  if(is4(849, 379)) {
+  if(numbers.is4(849, 379)) {
     stats.INT = 4;
-  } else if(is5(849, 379)){
+  } else if(numbers.is5(849, 379)){
     stats.INT = 5;
   }
 
   //LUK
-  if(is4(849, 399)) {
+  if(numbers.is4(849, 399)) {
     stats.LUK = 4;
-  } else if(is5(849, 399)){
+  } else if(numbers.is5(849, 399)){
     stats.LUK = 5;
   }
 }
 
 function checkMin(stats) {
   //STR
-  if(isDoubleDigit(848, 339)) {
+  if(numbers.isDoubleDigit(848, 339)) {
     stats.STR = 10;
   }
 
   //DEX
-  if(isDoubleDigit(848, 359)) {
+  if(numbers.isDoubleDigit(848, 359)) {
     stats.DEX = 10;
   }
 
   //INT
-  if(isDoubleDigit(848, 379)) {
+  if(numbers.isDoubleDigit(848, 379)) {
     stats.INT = 10;
   }
 
   //LUK
-  if(isDoubleDigit(848, 399)) {
+  if(numbers.isDoubleDigit(848, 399)) {
     stats.LUK = 10;
-  }
-}
-
-function is4(x, y) {
-  if(
-    robot.getPixelColor(x, y) === '000000' &&
-    robot.getPixelColor(x, y+6) === '000000'&&
-    robot.getPixelColor(x, y+8) === '000000'&&
-    robot.getPixelColor(x+1, y+6) === '000000'&&
-    robot.getPixelColor(x-3, y+6) === '000000'
-  ) {
-    return true;
-  }
-}
-
-function is5(x, y) {
-  //LUK 849,399
-  if(
-    robot.getPixelColor(x, y) === '000000' &&
-    robot.getPixelColor(x-3, y+1) === '000000' &&
-    robot.getPixelColor(x+1, y+5) === '000000' &&
-    robot.getPixelColor(x+1, y+6) === '000000' &&
-    robot.getPixelColor(x-2, y+8) === '000000'
-  ) {
-    return true;
-  }
-}
-
-function isDoubleDigit(x, y) {
-  if(
-    robot.getPixelColor(x, y) === '000000' &&
-    robot.getPixelColor(x, y+1) === '000000'&&
-    robot.getPixelColor(x, y+2) === '000000'&&
-    robot.getPixelColor(x, y+3) === '000000'&&
-    robot.getPixelColor(x, y+4) === '000000'&&
-    robot.getPixelColor(x, y+5) === '000000'&&
-    robot.getPixelColor(x, y+6) === '000000'&&
-    robot.getPixelColor(x, y+7) === '000000'&&
-    robot.getPixelColor(x, y+8) === '000000'
-  ) {
-    return true;
   }
 }
 
