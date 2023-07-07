@@ -34,7 +34,6 @@ function rollDice(desiredStats, mode) {
     robot.mouseClick();
     robot.moveMouseSmooth(getRandomCoords(910,920), getRandomCoords(395,405));
 
-    checkStats(desiredStats, mode);
   }
 
   setTimeout(() => {
@@ -70,8 +69,6 @@ function checkStats(desiredStats, mode) {
   //LUK: 849, 399
   output.LUK = getStat(849, 399);
 
-  console.log(output);
-
   if(!output.STR) {
     output.STR = 25 - output.DEX - output.INT - output.LUK;
   } else if(!output.DEX) {
@@ -82,13 +79,13 @@ function checkStats(desiredStats, mode) {
     output.LUK = 25 - output.STR - output.DEX - output.INT;
   }
 
-  // if(mode === 'max') {
-  //   // checkMax(output);
-  // } else if(mode === 'min') {
-  //   // checkMin(output);
-  // }
+  console.log(output);
 
-  fs.appendFileSync('./stats.txt', JSON.stringify(output));
+  if(output.STR + output.DEX + output.INT + output.LUK !== 25 || (output.STR <= desiredStats.STR && output.DEX <= desiredStats.DEX && output.LUK <= desiredStats.LUK)) {
+    fs.appendFileSync('./stats.txt', JSON.stringify(output)+'\n');
+    console.log('error');
+    return true;
+  }
 
   //check
   for(const val in desiredStats) {
