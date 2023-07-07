@@ -1,58 +1,94 @@
 const robot = require('robotjs');
 const numbers = require('./numbers.js');
-
-const readline = require('readline').createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+const fs = require('fs');
 
 function main() {
   const desiredStats = {
-    INT: 10
+    STR: 4,
+    DEX: 4,
+    LUK: 5
   }
   
   setTimeout(() => {
-    rollDice(desiredStats, 'min');
+    rollDice(desiredStats, 'max');
   }, 5000);
 
 }
 
 function rollDice(desiredStats, mode) {
-  if(checkStats(desiredStats, mode)) {
-    robot.moveMouse(833, 484);
-    robot.mouseClick();
-    console.log('character created');
-    process.exit();
-    return;
-  }
-
   if(
     robot.getPixelColor(1304, 662) === 'ee1111' && 
     robot.getPixelColor(672, 172) === 'ffcc33' && 
     robot.getPixelColor(676, 131) === '555588'
   ) {
+
+    if(checkStats(desiredStats, mode)) {
+      robot.moveMouse(833, 484);
+      robot.mouseClick();
+      console.log('character created');
+      process.exit();
+      return;
+    }
+
     robot.moveMouse(916,400);
     robot.mouseClick();
     robot.moveMouseSmooth(getRandomCoords(910,920), getRandomCoords(395,405));
+
+    checkStats(desiredStats, mode);
   }
+
   setTimeout(() => {
     rollDice(desiredStats, mode)
   }, 1000);
 }
 
+function getStat(x, y) {
+  for(const method in numbers) {
+    const value = numbers[method](x, y);
+    if(value) return value;
+  }
+}
 function checkStats(desiredStats, mode) {
   const output = {
-    STR: mode === 'max' ? Infinity : 0,
-    DEX: mode === 'max' ? Infinity : 0,
-    INT: mode === 'max' ? Infinity : 0,
-    LUK: mode === 'max' ? Infinity : 0
+    STR: undefined,
+    DEX: undefined,
+    INT: undefined,
+    LUK: undefined
   }
 
-  if(mode === 'max') {
-    checkMax(output);
-  } else if(mode === 'min') {
-    checkMin(output);
+  //Get Values
+
+  //STR: 849, 339
+  output.STR = getStat(849,339);
+
+  //DEX: 849, 359
+  output.DEX = getStat(849, 359);
+
+  //INT: 849, 379
+  output.INT = getStat(849, 379);
+
+  //LUK: 849, 399
+  output.LUK = getStat(849, 399);
+
+  console.log(output);
+
+  if(!output.STR) {
+    output.STR = 25 - output.DEX - output.INT - output.LUK;
+  } else if(!output.DEX) {
+    output.DEX = 25 - output.STR - output.INT - output.LUK;
+  } else if(!output.INT) {
+    output.INT = 25 - output.STR - output.DEX - output.LUK;
+  } else if(!output.LUK) {
+    output.LUK = 25 - output.STR - output.DEX - output.INT;
   }
+
+  // if(mode === 'max') {
+  //   // checkMax(output);
+  // } else if(mode === 'min') {
+  //   // checkMin(output);
+  // }
+
+  fs.appendFileSync('./stats.txt', JSON.stringify(output));
 
   //check
   for(const val in desiredStats) {
@@ -63,58 +99,6 @@ function checkStats(desiredStats, mode) {
     }
   }
   return true;
-}
-
-function checkMax(stats) {
-  //STR
-  if(numbers.is4(849, 339)) {
-    stats.STR = 4;
-  } else if(numbers.is5(849, 339)){
-    stats.STR = 5;
-  }
-
-  //DEX
-  if(numbers.is4(849, 359)) {
-    stats.DEX = 4;
-  } else if(numbers.is5(849, 359)){
-    stats.DEX = 5;
-  }
-
-  //INT
-  if(numbers.is4(849, 379)) {
-    stats.INT = 4;
-  } else if(numbers.is5(849, 379)){
-    stats.INT = 5;
-  }
-
-  //LUK
-  if(numbers.is4(849, 399)) {
-    stats.LUK = 4;
-  } else if(numbers.is5(849, 399)){
-    stats.LUK = 5;
-  }
-}
-
-function checkMin(stats) {
-  //STR
-  if(numbers.isDoubleDigit(848, 339)) {
-    stats.STR = 10;
-  }
-
-  //DEX
-  if(numbers.isDoubleDigit(848, 359)) {
-    stats.DEX = 10;
-  }
-
-  //INT
-  if(numbers.isDoubleDigit(848, 379)) {
-    stats.INT = 10;
-  }
-
-  //LUK
-  if(numbers.isDoubleDigit(848, 399)) {
-    stats.LUK = 10;
-  }
 }
 
 function getRandomCoords(min, max) {
