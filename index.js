@@ -21,7 +21,6 @@ function rollDice(desiredStats, mode) {
     robot.getPixelColor(672, 172) === 'ffcc33' && 
     robot.getPixelColor(676, 131) === '555588'
   ) {
-
     if(checkStats(desiredStats, mode)) {
       robot.moveMouse(833, 484);
       robot.mouseClick();
@@ -81,10 +80,10 @@ function checkStats(desiredStats, mode) {
 
   console.log(output);
 
-  if(output.STR + output.DEX + output.INT + output.LUK !== 25 || (output.STR <= desiredStats.STR && output.DEX <= desiredStats.DEX && output.LUK <= desiredStats.LUK)) {
+  if(output.STR + output.DEX + output.INT + output.LUK !== 25 || (output.STR === 12 || output.DEX === 12 || output.INT === 12 || output.LUK === 12)) {
     fs.appendFileSync('./stats.txt', JSON.stringify(output)+'\n');
     console.log('error');
-    return true;
+    // return true;
   }
 
   //check
